@@ -1,12 +1,13 @@
 package com.polyclinic.polyclinicapp.Controllers;
 
+import com.polyclinic.polyclinicapp.DTO.PatientsDTO;
+import com.polyclinic.polyclinicapp.ModelMapping;
 import com.polyclinic.polyclinicapp.Repositories.PatientsRepository;
 import com.polyclinic.polyclinicapp.entity.Patients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -14,26 +15,29 @@ import java.util.Optional;
 public class PatientsController {
     @Autowired
     PatientsRepository patientsRepository;
+    @Autowired
+    ModelMapping modelMapping;
 
     @GetMapping("/getPatients")
-    public List<Patients> getAllPatients() {
-        return patientsRepository.findAll();
+    public List<PatientsDTO> getAllPatients() {
+        return modelMapping.patientsDTOList(patientsRepository.findAll()) ;
     }
 
     @GetMapping("/getPatientsById")
-    public ResponseEntity<Patients> getPatientsById(@RequestParam int id) {
-        Optional<Patients> patient = patientsRepository.findById(id);
-        if (patient.isPresent()) {
-            return new ResponseEntity<>(patient.get(), HttpStatus.OK);
+    public ResponseEntity<PatientsDTO> getPatientsById(@RequestParam int id) {
+        Optional<Patients> patients = patientsRepository.findById(id);
+        if (patients.isPresent()) {
+            PatientsDTO patientDTO = modelMapping.patientsDTO(patients.get());
+            return new ResponseEntity<>(patientDTO, HttpStatus.OK);
         } else {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/getPatientsByName")
-    public ResponseEntity<List<Patients>> getPatientsByName(@RequestParam String name) {
-        List<Patients> patients = patientsRepository.findAll();
-        List<Patients> filteredPatients = patients.stream()
+    public ResponseEntity<List<PatientsDTO>> getPatientsByName(@RequestParam String name) {
+        List<PatientsDTO> patients = modelMapping.patientsDTOList(patientsRepository.findAll());
+        List<PatientsDTO> filteredPatients = patients.stream()
                 .filter(patient -> patient.getPatientName().toLowerCase().contains(name.toLowerCase()))
                 .toList();
         if (!filteredPatients.isEmpty()) {
@@ -44,34 +48,41 @@ public class PatientsController {
     }
 
     @PostMapping("/addPatient")
-    public String  addPatient(Patients patient) {
-        if (patient.getPatientName() == null || patient.getPatientName().isEmpty()) {
+    public String addPatient(@RequestBody PatientsDTO patientsDTO) {
+        System.out.println("Patient gender" + patientsDTO.getPatientName());
+        if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
             return "Patient name cannot be empty";
-        }
-        if (patient.getAge() <= 0) {
+        } else if (patientsDTO.getAge() <= 0) {
             return "Age must be greater than 0";
-        }
-        if (patient.getPhoneNumber() == null || patient.getPhoneNumber().isEmpty()) {
+        } else if (patientsDTO.getGender() != 'M' && patientsDTO.getGender() != 'F') {
+            return "Gender must be 'M' or 'F'";
+        } else if(patientsDTO.getGender() == '\u0000') {
+            return "Gender cannot be empty";
+        } else if (patientsDTO.getPhoneNumber() == null || patientsDTO.getPhoneNumber().isEmpty()) {
             return "Phone number cannot be empty";
         }
-        patientsRepository.save(patient);
+        patientsRepository.save(modelMapping.patients(patientsDTO));
         return "Patient added successfully";
     }
 
     @PutMapping("/updatePatient")
-    public ResponseEntity<String> updatePatient(Patients patient) {
-        if (patient.getPatientId() <= 0) {
+    public ResponseEntity<String> updatePatient(@RequestBody PatientsDTO patientsDTO) {
+        if (patientsDTO.getPatientId() <= 0) {
             return new ResponseEntity<>("Invalid patient ID", HttpStatus.BAD_REQUEST);
-        } else if (!patientsRepository.existsById(patient.getPatientId())) {
+        } else if (!patientsRepository.existsById(patientsDTO.getPatientId())) {
             return new ResponseEntity<>("Patient not found", HttpStatus.NOT_FOUND);
-        } else if (patient.getPatientName() == null || patient.getPatientName().isEmpty()) {
+        } else if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
             return new ResponseEntity<>("Patient name cannot be empty", HttpStatus.BAD_REQUEST);
-        } else if (patient.getAge() <= 0) {
+        } else if (patientsDTO.getAge() <= 0) {
             return new ResponseEntity<>("Age must be greater than 0", HttpStatus.BAD_REQUEST);
-        } else if (patient.getPhoneNumber() == null || patient.getPhoneNumber().isEmpty()) {
+        } else if (patientsDTO.getGender() != 'M' && patientsDTO.getGender() != 'F') {
+            return new ResponseEntity<>("Gender must be 'M' or 'F'", HttpStatus.BAD_REQUEST);
+        } else if(patientsDTO.getGender() == '\u0000') {
+            return new ResponseEntity<>("Gender cannot be empty", HttpStatus.BAD_REQUEST);
+        } else if (patientsDTO.getPhoneNumber() == null || patientsDTO.getPhoneNumber().isEmpty()) {
             return new ResponseEntity<>("Phone number cannot be empty", HttpStatus.BAD_REQUEST);
         }
-        patientsRepository.save(patient);
+        patientsRepository.save(modelMapping.patients(patientsDTO));
         return new ResponseEntity<>("Patient updated successfully", HttpStatus.OK);
     }
 
