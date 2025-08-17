@@ -60,42 +60,40 @@ public class PatientsController {
             return "Gender cannot be empty";
         } else if (patientsDTO.getPhoneNumber() == null || patientsDTO.getPhoneNumber().isEmpty()) {
             return "Phone number cannot be empty";
+        } else {
+            patientsRepository.save(modelMapping.patients(patientsDTO));
+            return "Patient added successfully";
         }
-        patientsRepository.save(modelMapping.patients(patientsDTO));
-        return "Patient added successfully";
     }
 
     @PutMapping("/updatePatient")
-    public ResponseEntity<String> updatePatient(@RequestBody PatientsDTO patientsDTO) {
-        if (patientsDTO.getPatientId() <= 0) {
-            return new ResponseEntity<>("Invalid patient ID", HttpStatus.BAD_REQUEST);
-        } else if (!patientsRepository.existsById(patientsDTO.getPatientId())) {
-            return new ResponseEntity<>("Patient not found", HttpStatus.NOT_FOUND);
-        } else if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
-            return new ResponseEntity<>("Patient name cannot be empty", HttpStatus.BAD_REQUEST);
+    public String updatePatient(@RequestBody PatientsDTO patientsDTO) {
+        if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
+            return "Patient name cannot be empty";
         } else if (patientsDTO.getAge() <= 0) {
-            return new ResponseEntity<>("Age must be greater than 0", HttpStatus.BAD_REQUEST);
+            return "Age must be greater than 0";
         } else if (patientsDTO.getGender() != 'M' && patientsDTO.getGender() != 'F') {
-            return new ResponseEntity<>("Gender must be 'M' or 'F'", HttpStatus.BAD_REQUEST);
+            return "Gender must be 'M' or 'F'";
         } else if(patientsDTO.getGender() == '\u0000') {
-            return new ResponseEntity<>("Gender cannot be empty", HttpStatus.BAD_REQUEST);
+            return "Gender cannot be empty";
         } else if (patientsDTO.getPhoneNumber() == null || patientsDTO.getPhoneNumber().isEmpty()) {
-            return new ResponseEntity<>("Phone number cannot be empty", HttpStatus.BAD_REQUEST);
+            return "Phone number cannot be empty";
         }
-        patientsRepository.save(modelMapping.patients(patientsDTO));
-        return new ResponseEntity<>("Patient updated successfully", HttpStatus.OK);
+        else {
+            patientsRepository.save(modelMapping.patients(patientsDTO));
+            return "Patient updated successfully";
+        }
     }
 
     @DeleteMapping("/deletePatient")
-    public ResponseEntity<String> deletePatient(@RequestParam int id) {
+    public String deletePatient(@RequestParam int id) {
         if (id <= 0) {
-            return new ResponseEntity<>("Invalid patient ID", HttpStatus.BAD_REQUEST);
+            return "Invalid patient ID";
         } else if (!patientsRepository.existsById(id)) {
-            return new ResponseEntity<>("Patient not found", HttpStatus.NOT_FOUND);
-        }
-        else {
+            return "Patient not found";
+        } else {
             patientsRepository.deleteById(id);
-            return new ResponseEntity<>("Patient deleted successfully", HttpStatus.OK);
+            return "Patient deleted successfully";
         }
     }
 }

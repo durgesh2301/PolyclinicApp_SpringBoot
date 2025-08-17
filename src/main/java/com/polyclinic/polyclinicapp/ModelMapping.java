@@ -1,7 +1,7 @@
 package com.polyclinic.polyclinicapp;
 
-import com.polyclinic.polyclinicapp.DTO.PatientsDTO;
-import com.polyclinic.polyclinicapp.entity.Patients;
+import com.polyclinic.polyclinicapp.DTO.*;
+import com.polyclinic.polyclinicapp.entity.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,10 +29,32 @@ public class ModelMapping {
         return modelMapper.map(patientsDTO, Patients.class);
     }
 
-    public  List<Patients> patientsList(List<PatientsDTO> patientsDTOList) {
-        return patientsDTOList.stream()
-                .map(this::patients)
+    public DoctorsDTO doctorsDTO(Doctors doctors) {
+        return modelMapper.map(doctors, DoctorsDTO.class);
+    }
+
+    public  List<DoctorsDTO> doctorsDTOList(List<Doctors> doctorsList) {
+        return doctorsList.stream()
+                .map(this::doctorsDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Doctors doctors(DoctorsDTO doctorsDTO) {
+        return modelMapper.map(doctorsDTO, Doctors.class);
+    }
+
+    public AppointmentsDTO appointmentsDTO(Appointments appointments) {
+        return modelMapper.map(appointments, AppointmentsDTO.class);
+    }
+
+    public  List<AppointmentsDTO> appointmentsDTOList(List<Appointments> appointmentsList) {
+        return appointmentsList.stream()
+                .map(this::appointmentsDTO)
+                .collect(Collectors.toList());
+    }
+
+    public Appointments appointments(AppointmentsDTO appointmentsDTO) {
+        return modelMapper.map(appointmentsDTO, Appointments.class);
     }
 
 }
