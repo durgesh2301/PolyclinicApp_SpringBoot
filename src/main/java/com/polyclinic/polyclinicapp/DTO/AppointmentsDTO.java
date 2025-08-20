@@ -9,6 +9,9 @@ public class AppointmentsDTO {
     private int doctorId;
     private Date appointmentDate;
 
+    private PatientsDTO patientsDTO;
+    private DoctorsDTO doctorsDTO;
+
     public int getAppointmentId() {
         return appointmentId;
     }
@@ -41,4 +44,16 @@ public class AppointmentsDTO {
         this.appointmentDate = appointmentDate;
     }
 
+    public PatientsDTO getPatientsDTO() {
+        return patientsDTO;
+    }
+    public void setPatientsDTO(PatientsDTO patientsDTO) {
+        this.patientsDTO = patientsDTO;
+    }
+    public DoctorsDTO getDoctorsDTO() {
+        return doctorsDTO;
+    }
+    public void setDoctorsDTO(DoctorsDTO doctorsDTO) {
+        this.doctorsDTO = doctorsDTO;
+    }
 }

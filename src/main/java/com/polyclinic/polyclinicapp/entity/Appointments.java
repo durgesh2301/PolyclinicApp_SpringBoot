@@ -52,4 +52,24 @@ public class Appointments {
     public void setAppointmentDate(Date appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "PatientId", referencedColumnName = "PatientId", insertable=false, updatable=false)
+    private Patients patients;
+    @ManyToOne
+    @JoinColumn(name = "DoctorId", referencedColumnName = "DoctorId", insertable=false, updatable=false)
+    private Doctors doctors;
+
+    public Patients getPatients() {
+        return patients;
+    }
+    public void setPatients(Patients patients) {
+        this.patients = patients;
+    }
+    public Doctors getDoctors() {
+        return doctors;
+    }
+    public void setDoctors(Doctors doctors) {
+        this.doctors = doctors;
+    }
 }

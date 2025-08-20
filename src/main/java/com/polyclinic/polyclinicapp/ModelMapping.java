@@ -44,7 +44,14 @@ public class ModelMapping {
     }
 
     public AppointmentsDTO appointmentsDTO(Appointments appointments) {
-        return modelMapper.map(appointments, AppointmentsDTO.class);
+        AppointmentsDTO appointmentsDTO = new AppointmentsDTO();
+        appointmentsDTO.setAppointmentId(appointments.getAppointmentId());
+        appointmentsDTO.setPatientId(appointments.getPatientId());
+        appointmentsDTO.setDoctorId(appointments.getDoctorId());
+        appointmentsDTO.setAppointmentDate(appointments.getAppointmentDate());
+        appointmentsDTO.setPatientsDTO(patientsDTO(appointments.getPatients()));
+        appointmentsDTO.setDoctorsDTO(doctorsDTO(appointments.getDoctors()));
+        return appointmentsDTO;
     }
 
     public  List<AppointmentsDTO> appointmentsDTOList(List<Appointments> appointmentsList) {

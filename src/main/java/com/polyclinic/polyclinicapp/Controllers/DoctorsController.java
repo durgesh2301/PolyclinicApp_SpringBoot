@@ -63,15 +63,18 @@ public class DoctorsController {
 
     @PutMapping("/updateDoctor")
     public String updateDoctor(@RequestBody DoctorsDTO doctorsDTO) {
-       if (doctorsDTO.getDoctorName() == null || doctorsDTO.getDoctorName().isEmpty()) {
+       if (!doctorsRepository.existsById(doctorsDTO.getDoctorId())) {
+           return "Doctor not found";
+       } else if (doctorsDTO.getDoctorName() == null || doctorsDTO.getDoctorName().isEmpty()) {
            return "Doctor name cannot be empty";
        } else if (doctorsDTO.getFees() <= 0) {
            return "Fees must be greater than 0";
        } else if (doctorsDTO.getSpecialization() == null || doctorsDTO.getSpecialization().isEmpty()) {
            return "Specialization cannot be empty";
+       } else {
+           doctorsRepository.save(modelMapping.doctors(doctorsDTO));
+           return "Doctor updated successfully";
        }
-        doctorsRepository.save(modelMapping.doctors(doctorsDTO));
-        return "Doctor updated successfully";
     }
 
     @DeleteMapping("/deleteDoctor")

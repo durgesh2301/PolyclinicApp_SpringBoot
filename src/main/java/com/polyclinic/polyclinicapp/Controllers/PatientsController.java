@@ -68,7 +68,9 @@ public class PatientsController {
 
     @PutMapping("/updatePatient")
     public String updatePatient(@RequestBody PatientsDTO patientsDTO) {
-        if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
+        if (!patientsRepository.existsById(patientsDTO.getPatientId())) {
+            return "Patient not found";
+        } else if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
             return "Patient name cannot be empty";
         } else if (patientsDTO.getAge() <= 0) {
             return "Age must be greater than 0";
@@ -78,8 +80,7 @@ public class PatientsController {
             return "Gender cannot be empty";
         } else if (patientsDTO.getPhoneNumber() == null || patientsDTO.getPhoneNumber().isEmpty()) {
             return "Phone number cannot be empty";
-        }
-        else {
+        } else {
             patientsRepository.save(modelMapping.patients(patientsDTO));
             return "Patient updated successfully";
         }
