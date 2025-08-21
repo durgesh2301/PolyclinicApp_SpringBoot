@@ -1,7 +1,6 @@
 package com.polyclinic.polyclinicapp.entity;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
@@ -72,4 +71,5 @@ public class Appointments {
     public void setDoctors(Doctors doctors) {
         this.doctors = doctors;
     }
+
 }

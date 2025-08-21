@@ -1,4 +1,4 @@
-package com.polyclinic.polyclinicapp.DTO;
+package com.polyclinic.polyclinicapp.dto;
 
 public class DoctorsDTO {
     private int doctorId;
@@ -37,4 +37,5 @@ public class DoctorsDTO {
     public void setFees(int fees) {
         this.fees = fees;
     }
+
 }

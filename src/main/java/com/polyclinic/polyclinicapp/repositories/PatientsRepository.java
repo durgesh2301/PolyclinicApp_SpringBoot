@@ -1,4 +1,4 @@
-package com.polyclinic.polyclinicapp.Repositories;
+package com.polyclinic.polyclinicapp.repositories;
 
 import com.polyclinic.polyclinicapp.entity.Patients;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
 package com.polyclinic.polyclinicapp;
 
-import com.polyclinic.polyclinicapp.DTO.*;
+import com.polyclinic.polyclinicapp.dto.*;
 import com.polyclinic.polyclinicapp.entity.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.polyclinic.polyclinicapp.DTO;
+package com.polyclinic.polyclinicapp.dto;
 
 import java.util.Date;
 
@@ -8,7 +8,6 @@ public class AppointmentsDTO {
     private int patientId;
     private int doctorId;
     private Date appointmentDate;
-
     private PatientsDTO patientsDTO;
     private DoctorsDTO doctorsDTO;
 
@@ -56,4 +55,5 @@ public class AppointmentsDTO {
     public void setDoctorsDTO(DoctorsDTO doctorsDTO) {
         this.doctorsDTO = doctorsDTO;
     }
+
 }

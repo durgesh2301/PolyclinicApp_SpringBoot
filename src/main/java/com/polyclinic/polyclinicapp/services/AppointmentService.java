@@ -1,20 +1,20 @@
-package com.polyclinic.polyclinicapp.Controllers;
+package com.polyclinic.polyclinicapp.services;
 
-import com.polyclinic.polyclinicapp.DTO.AppointmentsDTO;
+import com.polyclinic.polyclinicapp.dto.AppointmentsDTO;
 import com.polyclinic.polyclinicapp.ModelMapping;
-import com.polyclinic.polyclinicapp.Repositories.*;
+import com.polyclinic.polyclinicapp.repositories.*;
 import com.polyclinic.polyclinicapp.entity.Appointments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-public class AppointmentsController {
+@Service
+public class AppointmentService {
+
     @Autowired
     AppointmentsRepository appointmentsRepository;
     @Autowired
@@ -24,13 +24,11 @@ public class AppointmentsController {
     @Autowired
     ModelMapping modelMapping;
 
-    @GetMapping("/getAppointments")
     public List<AppointmentsDTO> getAllAppointments() {
         return modelMapping.appointmentsDTOList(appointmentsRepository.findAll()) ;
     }
 
-    @GetMapping("/getAppointmentsById")
-    public ResponseEntity<AppointmentsDTO> getAppointmentsById(@RequestParam int id) {
+    public ResponseEntity<AppointmentsDTO> getAppointmentsById(int id) {
         Optional<Appointments> appointments = appointmentsRepository.findById(id);
         if (appointments.isPresent()) {
             AppointmentsDTO appointmentsDTO = modelMapping.appointmentsDTO(appointments.get());
@@ -40,9 +38,8 @@ public class AppointmentsController {
         }
     }
 
-    @GetMapping("/getAppointmentsByDoctorIdAndAppointmentDate")
-    public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentId(@RequestParam int doctorId, @RequestParam String datestr) {
-        Date appointmentDate = java.sql.Date.valueOf(datestr);
+    public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentId(int doctorId, String datestamp) {
+        Date appointmentDate = java.sql.Date.valueOf(datestamp);
         Appointments appointments = appointmentsRepository.findByDoctorIdAndAppointmentDate(doctorId, appointmentDate);
         if (appointments != null) {
             AppointmentsDTO appointmentsDTO = modelMapping.appointmentsDTO(appointments);
@@ -52,13 +49,12 @@ public class AppointmentsController {
         }
     }
 
-    @PostMapping("/createAppointment")
-    public ResponseEntity<String> createAppointment(@RequestBody AppointmentsDTO appointmentsDTO) {
+    public ResponseEntity<String> createAppointment(AppointmentsDTO appointmentsDTO) {
         Appointments appointments = modelMapping.appointments(appointmentsDTO);
-        if(!patientsRepository.findById(appointments.getPatientId()).isPresent()) {
+        if(patientsRepository.findById(appointments.getPatientId()).isEmpty()) {
             return new ResponseEntity<>("Patient not found", HttpStatus.BAD_REQUEST);
         }
-        else if (!doctorsRepository.findById(appointments.getDoctorId()).isPresent()) {
+        else if (doctorsRepository.findById(appointments.getDoctorId()).isEmpty()) {
             return new ResponseEntity<>("Doctor not found", HttpStatus.BAD_REQUEST);
         }
         else if(appointments.getAppointmentDate().before(new Date())) {
@@ -73,24 +69,22 @@ public class AppointmentsController {
         }
     }
 
-    @PutMapping("/updateAppointment")
-    public String updateAppointment(@RequestBody AppointmentsDTO appointmentsDTO) {
+    public String updateAppointment(AppointmentsDTO appointmentsDTO) {
         if (!appointmentsRepository.existsById(appointmentsDTO.getAppointmentId())) {
             return "Appointment not found";
-        } else if (!patientsRepository.findById(appointmentsDTO.getPatientId()).isPresent()) {
+        } else if (patientsRepository.findById(appointmentsDTO.getPatientId()).isEmpty()) {
             return "Patient not found";
-        } else if (!doctorsRepository.findById(appointmentsDTO.getDoctorId()).isPresent()) {
+        } else if (doctorsRepository.findById(appointmentsDTO.getDoctorId()).isEmpty()) {
             return "Doctor not found";
         } else if (appointmentsDTO.getAppointmentDate().before(new Date())) {
             return "Appointment date must be in the future";
-        } else {;
+        } else {
             appointmentsRepository.save(modelMapping.appointments(appointmentsDTO));
             return "Appointment updated successfully";
         }
     }
 
-    @DeleteMapping("/deleteAppointment")
-    public String deleteAppointment(@RequestParam int id) {
+    public String deleteAppointment(int id) {
         if (id <= 0) {
             return "Invalid appointment ID";
         } else if (!appointmentsRepository.existsById(id)) {
@@ -100,4 +94,5 @@ public class AppointmentsController {
             return "Appointment deleted successfully";
         }
     }
+
 }

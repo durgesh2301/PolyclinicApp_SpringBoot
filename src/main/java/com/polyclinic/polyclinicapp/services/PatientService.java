@@ -1,41 +1,40 @@
-package com.polyclinic.polyclinicapp.Controllers;
+package com.polyclinic.polyclinicapp.services;
 
-import com.polyclinic.polyclinicapp.DTO.PatientsDTO;
+import com.polyclinic.polyclinicapp.dto.PatientsDTO;
 import com.polyclinic.polyclinicapp.ModelMapping;
-import com.polyclinic.polyclinicapp.Repositories.PatientsRepository;
+import com.polyclinic.polyclinicapp.repositories.PatientsRepository;
 import com.polyclinic.polyclinicapp.entity.Patients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-public class PatientsController {
+@Service
+public class PatientService {
+
     @Autowired
     PatientsRepository patientsRepository;
     @Autowired
     ModelMapping modelMapping;
 
-    @GetMapping("/getPatients")
     public List<PatientsDTO> getAllPatients() {
         return modelMapping.patientsDTOList(patientsRepository.findAll()) ;
     }
 
-    @GetMapping("/getPatientsById")
-    public ResponseEntity<PatientsDTO> getPatientsById(@RequestParam int id) {
+    public ResponseEntity<PatientsDTO> getPatientsById(int id) {
         Optional<Patients> patients = patientsRepository.findById(id);
         if (patients.isPresent()) {
             PatientsDTO patientDTO = modelMapping.patientsDTO(patients.get());
             return new ResponseEntity<>(patientDTO, HttpStatus.OK);
         } else {
-           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/getPatientsByName")
-    public ResponseEntity<List<PatientsDTO>> getPatientsByName(@RequestParam String name) {
+    public ResponseEntity<List<PatientsDTO>> getPatientsByName(String name) {
         List<PatientsDTO> patients = modelMapping.patientsDTOList(patientsRepository.findAll());
         List<PatientsDTO> filteredPatients = patients.stream()
                 .filter(patient -> patient.getPatientName().toLowerCase().contains(name.toLowerCase()))
@@ -47,8 +46,7 @@ public class PatientsController {
         }
     }
 
-    @PostMapping("/addPatient")
-    public String addPatient(@RequestBody PatientsDTO patientsDTO) {
+    public String addPatient(PatientsDTO patientsDTO) {
         System.out.println("Patient gender" + patientsDTO.getPatientName());
         if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
             return "Patient name cannot be empty";
@@ -66,8 +64,7 @@ public class PatientsController {
         }
     }
 
-    @PutMapping("/updatePatient")
-    public String updatePatient(@RequestBody PatientsDTO patientsDTO) {
+    public String updatePatient(PatientsDTO patientsDTO) {
         if (!patientsRepository.existsById(patientsDTO.getPatientId())) {
             return "Patient not found";
         } else if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
@@ -86,8 +83,7 @@ public class PatientsController {
         }
     }
 
-    @DeleteMapping("/deletePatient")
-    public String deletePatient(@RequestParam int id) {
+    public String deletePatient(int id) {
         if (id <= 0) {
             return "Invalid patient ID";
         } else if (!patientsRepository.existsById(id)) {
@@ -97,4 +93,5 @@ public class PatientsController {
             return "Patient deleted successfully";
         }
     }
+
 }

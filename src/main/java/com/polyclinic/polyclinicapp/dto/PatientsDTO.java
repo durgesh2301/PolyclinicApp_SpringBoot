@@ -1,4 +1,4 @@
-package com.polyclinic.polyclinicapp.DTO;
+package com.polyclinic.polyclinicapp.dto;
 
 public class PatientsDTO {
     private int patientId;
@@ -46,4 +46,5 @@ public class PatientsDTO {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
 }

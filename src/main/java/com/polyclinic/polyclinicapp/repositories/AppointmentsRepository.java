@@ -1,4 +1,4 @@
-package com.polyclinic.polyclinicapp.Repositories;
+package com.polyclinic.polyclinicapp.repositories;
 
 import com.polyclinic.polyclinicapp.entity.Appointments;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,8 @@ import java.util.Date;
 @Repository
 public interface AppointmentsRepository extends JpaRepository<Appointments, Integer> {
 
-    public Appointments findByAppointmentDateAndDoctorIdAndPatientId(Date appointmentDate, int doctorId, int patientId);
+    Appointments findByAppointmentDateAndDoctorIdAndPatientId(Date appointmentDate, int doctorId, int patientId);
 
-    public Appointments findByDoctorIdAndAppointmentDate(int doctorId, Date appointmentDate);
+    Appointments findByDoctorIdAndAppointmentDate(int doctorId, Date appointmentDate);
+
 }
