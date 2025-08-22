@@ -29,7 +29,7 @@ public class AppointmentsController {
     }
 
     @PostMapping("/createAppointment")
-    public ResponseEntity<String> createAppointment(@RequestBody AppointmentsDTO appointmentsDTO) {
+    public String createAppointment(@RequestBody AppointmentsDTO appointmentsDTO) {
         return appointmentService.createAppointment(appointmentsDTO);
     }
 

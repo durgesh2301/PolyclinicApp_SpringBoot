@@ -25,16 +25,19 @@ public class AppointmentService {
     ModelMapping modelMapping;
 
     public List<AppointmentsDTO> getAllAppointments() {
-        return modelMapping.appointmentsDTOList(appointmentsRepository.findAll()) ;
+        List<AppointmentsDTO> appointmentsList;
+        List<Appointments> appointments = appointmentsRepository.findAll();
+        appointmentsList = modelMapping.appointmentsDTOList(appointments);
+        return appointmentsList;
     }
 
     public ResponseEntity<AppointmentsDTO> getAppointmentsById(int id) {
         Optional<Appointments> appointments = appointmentsRepository.findById(id);
         if (appointments.isPresent()) {
-            AppointmentsDTO appointmentsDTO = modelMapping.appointmentsDTO(appointments.get());
-            return new ResponseEntity<>(appointmentsDTO, HttpStatus.OK);
+            AppointmentsDTO appointmentsobj = modelMapping.appointmentsDTO(appointments.get());
+            return new ResponseEntity<>(appointmentsobj, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -42,30 +45,30 @@ public class AppointmentService {
         Date appointmentDate = java.sql.Date.valueOf(datestamp);
         Appointments appointments = appointmentsRepository.findByDoctorIdAndAppointmentDate(doctorId, appointmentDate);
         if (appointments != null) {
-            AppointmentsDTO appointmentsDTO = modelMapping.appointmentsDTO(appointments);
-            return new ResponseEntity<>(appointmentsDTO, HttpStatus.OK);
+            AppointmentsDTO appointmentsobj = modelMapping.appointmentsDTO(appointments);
+            return new ResponseEntity<>(appointmentsobj, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
-    public ResponseEntity<String> createAppointment(AppointmentsDTO appointmentsDTO) {
-        Appointments appointments = modelMapping.appointments(appointmentsDTO);
-        if(patientsRepository.findById(appointments.getPatientId()).isEmpty()) {
-            return new ResponseEntity<>("Patient not found", HttpStatus.BAD_REQUEST);
+    public String createAppointment(AppointmentsDTO appointmentsDTO) {
+
+        if(patientsRepository.findById(appointmentsDTO.getPatientId()).isEmpty()) {
+            return "Patient not found";
         }
-        else if (doctorsRepository.findById(appointments.getDoctorId()).isEmpty()) {
-            return new ResponseEntity<>("Doctor not found", HttpStatus.BAD_REQUEST);
+        else if (doctorsRepository.findById(appointmentsDTO.getDoctorId()).isEmpty()) {
+            return "Doctor not found";
         }
-        else if(appointments.getAppointmentDate().before(new Date())) {
-            return new ResponseEntity<>("Appointment date must be in the future", HttpStatus.BAD_REQUEST);
+        else if(appointmentsDTO.getAppointmentDate().before(new Date())) {
+            return "Appointment date must be in the future";
         }
-        else if (appointmentsRepository.findByAppointmentDateAndDoctorIdAndPatientId(appointments.getAppointmentDate(), appointments.getDoctorId(), appointments.getPatientId()) != null) {
-            return new ResponseEntity<>("Appointment already exists", HttpStatus.BAD_REQUEST);
+        else if (appointmentsRepository.findByAppointmentDateAndDoctorIdAndPatientId(appointmentsDTO.getAppointmentDate(), appointmentsDTO.getDoctorId(), appointmentsDTO.getPatientId()) != null) {
+            return "Appointment already exists";
         }
         else {
-            appointmentsRepository.save(appointments);
-            return new ResponseEntity<>("Appointment created successfully", HttpStatus.CREATED);
+            appointmentsRepository.save(modelMapping.appointments(appointmentsDTO));
+            return "Appointment created successfully";
         }
     }
 

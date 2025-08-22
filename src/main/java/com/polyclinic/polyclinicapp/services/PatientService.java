@@ -21,33 +21,32 @@ public class PatientService {
     ModelMapping modelMapping;
 
     public List<PatientsDTO> getAllPatients() {
-        return modelMapping.patientsDTOList(patientsRepository.findAll()) ;
+        List<PatientsDTO> patientsList;
+        List<Patients> patients = patientsRepository.findAll();
+        patientsList = modelMapping.patientsDTOList(patients);
+        return patientsList;
     }
 
     public ResponseEntity<PatientsDTO> getPatientsById(int id) {
-        Optional<Patients> patients = patientsRepository.findById(id);
-        if (patients.isPresent()) {
-            PatientsDTO patientDTO = modelMapping.patientsDTO(patients.get());
-            return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+        Optional<Patients> patient = patientsRepository.findById(id);
+        if (patient.isPresent()) {
+            PatientsDTO patientObj = modelMapping.patientsDTO(patient.get());
+            return new ResponseEntity<>(patientObj, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     public ResponseEntity<List<PatientsDTO>> getPatientsByName(String name) {
-        List<PatientsDTO> patients = modelMapping.patientsDTOList(patientsRepository.findAll());
-        List<PatientsDTO> filteredPatients = patients.stream()
-                .filter(patient -> patient.getPatientName().toLowerCase().contains(name.toLowerCase()))
-                .toList();
-        if (!filteredPatients.isEmpty()) {
-            return new ResponseEntity<>(filteredPatients, HttpStatus.OK);
+        List<PatientsDTO> patientsList = modelMapping.patientsDTOList(patientsRepository.findByPatientNameContaining(name));
+        if (!patientsList.isEmpty()) {
+            return new ResponseEntity<>(patientsList, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     public String addPatient(PatientsDTO patientsDTO) {
-        System.out.println("Patient gender" + patientsDTO.getPatientName());
         if (patientsDTO.getPatientName() == null || patientsDTO.getPatientName().isEmpty()) {
             return "Patient name cannot be empty";
         } else if (patientsDTO.getAge() <= 0) {

@@ -21,28 +21,28 @@ public class DoctorService {
     ModelMapping modelMapping;
 
     public List<DoctorsDTO> getAllDoctors() {
-        return modelMapping.doctorsDTOList(doctorsRepository.findAll()) ;
+        List<DoctorsDTO> doctorsList;
+        List<Doctors> doctors = doctorsRepository.findAll();
+        doctorsList = modelMapping.doctorsDTOList(doctors);
+        return doctorsList;
     }
 
     public ResponseEntity<DoctorsDTO> getDoctorsById(int id) {
-        Optional<Doctors> doctors = doctorsRepository.findById(id);
-        if (doctors.isPresent()) {
-            DoctorsDTO doctorsDTO = modelMapping.doctorsDTO(doctors.get());
-            return new ResponseEntity<>(doctorsDTO, HttpStatus.OK);
+        Optional<Doctors> doctor = doctorsRepository.findById(id);
+        if (doctor.isPresent()) {
+            DoctorsDTO doctorObj =  modelMapping.doctorsDTO(doctor.get());
+            return new ResponseEntity<>(doctorObj, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null ,HttpStatus.NOT_FOUND);
         }
     }
 
     public ResponseEntity<List<DoctorsDTO>> getDoctorsByName(String name) {
-        List<DoctorsDTO> doctors = modelMapping.doctorsDTOList(doctorsRepository.findAll());
-        List<DoctorsDTO> filteredDoctors = doctors.stream()
-                .filter(doctor -> doctor.getDoctorName().toLowerCase().contains(name.toLowerCase()))
-                .toList();
-        if (!filteredDoctors.isEmpty()) {
-            return new ResponseEntity<>(filteredDoctors, HttpStatus.OK);
+        List<DoctorsDTO> doctorsList = modelMapping.doctorsDTOList(doctorsRepository.findByDoctorNameContaining(name));
+        if (!doctorsList.isEmpty()) {
+            return new ResponseEntity<>(doctorsList, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
