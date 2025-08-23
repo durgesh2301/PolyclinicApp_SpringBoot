@@ -1,0 +1,34 @@
+-- Create database
+CREATE DATABASE IF NOT EXISTS PolyclinicDB;
+USE PolyclinicDB;
+
+-- Create Doctor table
+CREATE TABLE Doctors (
+    DoctorId INT AUTO_INCREMENT PRIMARY KEY,
+    DoctorName VARCHAR(50) NOT NULL,
+    Specialization VARCHAR(100) NOT NULL,
+    Fees INT NOT NULL
+);
+
+-- Create Patient table
+CREATE TABLE Patients (
+    PatientId INT AUTO_INCREMENT PRIMARY KEY,
+    PatientName VARCHAR(100) NOT NULL,
+    Age INT NOT NULL,
+    Gender CHAR(1) NOT NULL CHECK (Gender IN ('M', 'F')),
+    PhoneNumber VARCHAR(15) NOT NULL
+);
+
+-- Create Appointment table
+CREATE TABLE Appointments (
+    AppointmentId INT AUTO_INCREMENT PRIMARY KEY,
+    PatientId INT NOT NULL,
+    DoctorId INT NOT NULL,
+    AppointmentDate DATETIME NOT NULL,
+    FOREIGN KEY (PatientId) REFERENCES Patients(PatientId),
+    FOREIGN KEY (DoctorId) REFERENCES Doctors(DoctorId)
+);
+
+ALTER TABLE Doctors AUTO_INCREMENT = 1000;
+ALTER TABLE Appointments AUTO_INCREMENT = 1000;
+ALTER TABLE Patients  AUTO_INCREMENT = 1000;
