@@ -13,32 +13,32 @@ public class AppointmentsController {
     @Autowired
     AppointmentService appointmentService;
 
-    @GetMapping("/getAppointments")
+    @GetMapping("/api/appointments")
     public List<AppointmentsDTO> getAllAppointments() {
         return appointmentService.getAllAppointments();
     }
 
-    @GetMapping("/getAppointmentsById")
+    @GetMapping("/api/appointments/{id}")
     public ResponseEntity<AppointmentsDTO> getAppointmentsById(@RequestParam int id) {
         return appointmentService.getAppointmentsById(id);
     }
 
-    @GetMapping("/getAppointmentsByDoctorIdAndAppointmentDate")
+    @GetMapping("/api/appointments/search")
     public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentId(@RequestParam int doctorId, @RequestParam String datestamp) {
         return appointmentService.getAppointmentsByDoctorIdAndAppointmentId(doctorId, datestamp);
     }
 
-    @PostMapping("/createAppointment")
+    @PostMapping("/api/appointments")
     public String createAppointment(@RequestBody AppointmentsDTO appointmentsDTO) {
         return appointmentService.createAppointment(appointmentsDTO);
     }
 
-    @PutMapping("/updateAppointment")
+    @PutMapping("/api/appointments")
     public String updateAppointment(@RequestBody AppointmentsDTO appointmentsDTO) {
         return appointmentService.updateAppointment(appointmentsDTO);
     }
 
-    @DeleteMapping("/deleteAppointment")
+    @DeleteMapping("/api/appointments{id}")
     public String deleteAppointment(@RequestParam int id) {
         return appointmentService.deleteAppointment(id);
     }

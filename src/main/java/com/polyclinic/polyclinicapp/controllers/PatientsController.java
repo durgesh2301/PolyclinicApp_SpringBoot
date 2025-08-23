@@ -13,32 +13,32 @@ public class PatientsController {
     @Autowired
     PatientService patientService;
 
-    @GetMapping("/getPatients")
+    @GetMapping("/api/patients")
     public List<PatientsDTO> getAllPatients() {
         return patientService.getAllPatients();
     }
 
-    @GetMapping("/getPatientsById")
+    @GetMapping("/api/patients/{id}")
     public ResponseEntity<PatientsDTO> getPatientsById(@RequestParam int id) {
         return patientService.getPatientsById(id);
     }
 
-    @GetMapping("/getPatientsByName")
+    @GetMapping("/api/patients/{name}")
     public ResponseEntity<List<PatientsDTO>> getPatientsByName(@RequestParam String name) {
         return patientService.getPatientsByName(name);
     }
 
-    @PostMapping("/addPatient")
+    @PostMapping("/api/patients")
     public String addPatient(@RequestBody PatientsDTO patientsDTO) {
         return patientService.addPatient(patientsDTO);
     }
 
-    @PutMapping("/updatePatient")
+    @PutMapping("/api/patients")
     public String updatePatient(@RequestBody PatientsDTO patientsDTO) {
         return patientService.updatePatient(patientsDTO);
     }
 
-    @DeleteMapping("/deletePatient")
+    @DeleteMapping("/api/patients/{id}")
     public String deletePatient(@RequestParam int id) {
         return patientService.deletePatient(id);
     }
