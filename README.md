@@ -27,7 +27,8 @@ A comprehensive web application for managing a polyclinic's operations, includin
 
 1. Clone the repository
    ```bash
-   git clone durgesh2301/PolyclinicApp_SpringBoot
+   git clone durgesh2301/PolyclinicApp_SpringBoot #For github
+   git@gitlab.com:durgesh2301-group/PolyclinicApp_Spring_Boot.git #For gitlab
    cd PolyclinicApp_Spring_Boot
    ```
 
