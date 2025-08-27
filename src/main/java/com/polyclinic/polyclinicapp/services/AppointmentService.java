@@ -16,13 +16,13 @@ import java.util.Optional;
 public class AppointmentService {
 
     @Autowired
-    AppointmentsRepository appointmentsRepository;
+    private AppointmentsRepository appointmentsRepository;
     @Autowired
-    PatientsRepository patientsRepository;
+    private PatientsRepository patientsRepository;
     @Autowired
-    DoctorsRepository doctorsRepository;
+    private DoctorsRepository doctorsRepository;
     @Autowired
-    ModelMapping modelMapping;
+    private ModelMapping modelMapping;
 
     public List<AppointmentsDTO> getAllAppointments() {
         List<AppointmentsDTO> appointmentsList;

@@ -11,7 +11,7 @@ import java.util.List;
 public class AppointmentsController {
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @GetMapping("/api/appointments")
     public List<AppointmentsDTO> getAllAppointments() {

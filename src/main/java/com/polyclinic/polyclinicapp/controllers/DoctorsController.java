@@ -11,7 +11,7 @@ import java.util.List;
 public class DoctorsController {
 
     @Autowired
-    DoctorService doctorService;
+    private DoctorService doctorService;
 
    @GetMapping("/api/doctors")
    public List<DoctorsDTO> getAllDoctors() {

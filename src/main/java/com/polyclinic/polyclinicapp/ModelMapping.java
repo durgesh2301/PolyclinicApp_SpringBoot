@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class ModelMapping {
 
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     public PatientsDTO patientsDTO(Patients patients) {
         return modelMapper.map(patients, PatientsDTO.class);

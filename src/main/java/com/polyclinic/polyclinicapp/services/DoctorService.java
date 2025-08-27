@@ -16,9 +16,9 @@ import java.util.Optional;
 public class DoctorService {
 
     @Autowired
-    DoctorsRepository doctorsRepository;
+    private DoctorsRepository doctorsRepository;
     @Autowired
-    ModelMapping modelMapping;
+    private ModelMapping modelMapping;
 
     public List<DoctorsDTO> getAllDoctors() {
         List<DoctorsDTO> doctorsList;
