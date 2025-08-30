@@ -24,8 +24,8 @@ public class AppointmentsController {
     }
 
     @GetMapping("/api/appointments/search")
-    public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentId(@RequestParam int doctorId, @RequestParam String datestamp) {
-        return appointmentService.getAppointmentsByDoctorIdAndAppointmentId(doctorId, datestamp);
+    public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentDate(@RequestParam int doctorId, @RequestParam String datestamp) {
+        return appointmentService.getAppointmentsByDoctorIdAndAppointmentDate(doctorId, datestamp);
     }
 
     @PostMapping("/api/appointments")

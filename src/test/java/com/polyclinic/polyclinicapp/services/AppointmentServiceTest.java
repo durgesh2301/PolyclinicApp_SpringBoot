@@ -83,7 +83,7 @@ class AppointmentServiceTest {
             "1,2023-10-01,true",   // appointment exists
             "2,2025-01-01,false"   // appointment does not exist
     })
-    void testGetAppointmentsByDoctorIdAndAppointmentId(int doctorId,String appointmentDate, boolean exists) {
+    void testGetAppointmentsByDoctorIdAndAppointmentDate(int doctorId, String appointmentDate, boolean exists) {
         Appointments appointment = new Appointments();
         AppointmentsDTO appointmentDTO = new AppointmentsDTO();
         if (exists) {
@@ -93,7 +93,7 @@ class AppointmentServiceTest {
         else {
             when(appointmentsRepository.findByDoctorIdAndAppointmentDate(doctorId, java.sql.Date.valueOf(appointmentDate))).thenReturn(null);
         }
-        ResponseEntity<AppointmentsDTO> result = appointmentService.getAppointmentsByDoctorIdAndAppointmentId(doctorId, appointmentDate);
+        ResponseEntity<AppointmentsDTO> result = appointmentService.getAppointmentsByDoctorIdAndAppointmentDate(doctorId, appointmentDate);
         if (exists) {
             Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
             Assertions.assertEquals(appointmentDTO, result.getBody());

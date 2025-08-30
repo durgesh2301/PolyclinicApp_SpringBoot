@@ -27,8 +27,8 @@ A comprehensive web application for managing a polyclinic's operations, includin
 
 1. Clone the repository
    ```bash
-   git clone durgesh2301/PolyclinicApp_SpringBoot #For github
-   git@gitlab.com:durgesh2301-group/PolyclinicApp_Spring_Boot.git #For gitlab
+   git clone https://github.com/durgesh2301/PolyclinicApp_SpringBoot.git #For github
+   git clone https://gitlab.com/durgesh2301-group/PolyclinicApp_Spring_Boot.git #For gitlab
    cd PolyclinicApp_Spring_Boot
    ```
 
@@ -56,26 +56,27 @@ A comprehensive web application for managing a polyclinic's operations, includin
 
 - `GET /api/appointments` - Get all appointments
 - `GET /api/appointments/{id}` - Get appointment by ID
-- `GET /api/appointments/doctor/{doctorId}/date` - Get appointments by doctor ID and date
-- `POST /api/appointments/createAppointment` - Create a new appointment
-- `PUT /api/appointments/{id}` - Update an appointment
+- `GET /api/appointments/search` - Get appointment by doctor ID and appointment date
+- `POST /api/appointments` - Create a new appointment
+- `PUT /api/appointments` - Update an appointment
 - `DELETE /api/appointments/{id}` - Delete an appointment
 
 ### Doctors
 
 - `GET /api/doctors` - Get all doctors
 - `GET /api/doctors/{id}` - Get doctor by ID
+- `GET /api/doctors/{name}` - Get doctor by name
 - `POST /api/doctors` - Add a new doctor
-- `PUT /api/doctors/{id}` - Update a doctor
+- `PUT /api/doctors` - Update a doctor
 - `DELETE /api/doctors/{id}` - Delete a doctor
 
 ### Patients
 
 - `GET /api/patients` - Get all patients
 - `GET /api/patients/{id}` - Get patient by ID
-- `GET /api/patients/{id}/appointments` - Get patient's appointment history
+- `GET /api/patients/{name}` - Get patient by name
 - `POST /api/patients` - Register a new patient
-- `PUT /api/patients/{id}` - Update patient information
+- `PUT /api/patients` - Update patient information
 - `DELETE /api/patients/{id}` - Delete a patient
 
 ## Database Schema

@@ -41,7 +41,7 @@ public class AppointmentService {
         }
     }
 
-    public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentId(int doctorId, String datestamp) {
+    public ResponseEntity<AppointmentsDTO> getAppointmentsByDoctorIdAndAppointmentDate(int doctorId, String datestamp) {
         Date appointmentDate = java.sql.Date.valueOf(datestamp);
         Appointments appointments = appointmentsRepository.findByDoctorIdAndAppointmentDate(doctorId, appointmentDate);
         if (appointments != null) {

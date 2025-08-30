@@ -80,13 +80,13 @@ class AppointmentsControllerTest {
         AppointmentsDTO expectedAppointment = new AppointmentsDTO();
 
         if (exists) {
-            when(appointmentService.getAppointmentsByDoctorIdAndAppointmentId(id, datestamp)).thenReturn(ResponseEntity.ok(expectedAppointment));
+            when(appointmentService.getAppointmentsByDoctorIdAndAppointmentDate(id, datestamp)).thenReturn(ResponseEntity.ok(expectedAppointment));
         } else {
-            when(appointmentService.getAppointmentsByDoctorIdAndAppointmentId(id, datestamp)).thenReturn(ResponseEntity.notFound().build());
+            when(appointmentService.getAppointmentsByDoctorIdAndAppointmentDate(id, datestamp)).thenReturn(ResponseEntity.notFound().build());
         }
 
         // Act
-        ResponseEntity<AppointmentsDTO> result = appointmentsController.getAppointmentsByDoctorIdAndAppointmentId(id, datestamp);
+        ResponseEntity<AppointmentsDTO> result = appointmentsController.getAppointmentsByDoctorIdAndAppointmentDate(id, datestamp);
 
         // Assert
         if (exists) {
